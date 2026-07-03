@@ -42,7 +42,7 @@ jobs:
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/task-api:${{ steps.vars.outputs.tag }}
             ${{ secrets.DOCKERHUB_USERNAME }}/task-api:latest
-
+      #CD
       - name: Checkout manifests-repo
         uses: actions/checkout@v7
         with:
