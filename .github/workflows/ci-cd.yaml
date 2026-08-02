@@ -22,11 +22,22 @@ jobs:
       - name: Build com Maven
         run: mvn package -DskipTests -B
 
+      # --- DEVSECOPS: STEP 1 - SONARQUBE (SAST & Qualidade) ---
+      - name: Analise de Qualidade e SAST (SonarQube)
+        if: ${{ env.SONAR_TOKEN != '' || secrets.SONAR_TOKEN != '' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        run: |
+          mvn sonar:sonar \
+            -Dsonar.projectKey=task-api \
+            -Dsonar.projectName="task-api" \
+            -Dsonar.host.url=${SONAR_HOST_URL:-https://sonarcloud.io}
+
       - name: Definir tag da imagem
         id: vars
         run: echo "tag=$(echo ${{ github.sha }} | cut -c1-7)" >> "$GITHUB_OUTPUT"
-
-      #nexus_step
 
       - name: Login no Docker Hub
         uses: docker/login-action@v4

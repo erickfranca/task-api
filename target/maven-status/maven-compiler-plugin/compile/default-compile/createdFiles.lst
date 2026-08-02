@@ -1,0 +1,4 @@
+com/lab/taskapi/controller/TaskController.class
+com/lab/taskapi/TaskApiApplication.class
+com/lab/taskapi/service/TaskService.class
+com/lab/taskapi/model/Task.class

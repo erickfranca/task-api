@@ -1,0 +1,4 @@
+/home/sauron/labs/argo/gitops-java/task-api/src/main/java/com/lab/taskapi/TaskApiApplication.java
+/home/sauron/labs/argo/gitops-java/task-api/src/main/java/com/lab/taskapi/controller/TaskController.java
+/home/sauron/labs/argo/gitops-java/task-api/src/main/java/com/lab/taskapi/model/Task.java
+/home/sauron/labs/argo/gitops-java/task-api/src/main/java/com/lab/taskapi/service/TaskService.java
