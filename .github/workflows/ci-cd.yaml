@@ -37,6 +37,16 @@ jobs:
             -Dsonar.projectName="task-api" \
             -Dsonar.host.url=${SONAR_HOST_URL:-https://sonarcloud.io}
 
+      # --- DEVSECOPS: STEP 2 - TRIVY SCA (Scan do pom.xml / Dependencias) ---
+      - name: Scan de Dependencias e Codigo Fonte (Trivy SCA)
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'table'
+          severity: 'HIGH,CRITICAL'
+          exit-code: '0'
+
       - name: Definir tag da imagem
         id: vars
         run: echo "tag=$(echo ${{ github.sha }} | cut -c1-7)" >> "$GITHUB_OUTPUT"
@@ -55,6 +65,17 @@ jobs:
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/task-api:${{ steps.vars.outputs.tag }}
             ${{ secrets.DOCKERHUB_USERNAME }}/task-api:latest
+
+      # --- DEVSECOPS: STEP 3 - TRIVY CONTAINER SCAN ---
+      - name: Scan da Imagem Docker (Trivy Container)
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          scan-type: 'image'
+          image-ref: '${{ secrets.DOCKERHUB_USERNAME }}/task-api:${{ steps.vars.outputs.tag }}'
+          format: 'table'
+          severity: 'HIGH,CRITICAL'
+          exit-code: '0'
+
       #CD
       - name: Checkout manifests-repo
         uses: actions/checkout@v7
