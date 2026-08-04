@@ -24,18 +24,17 @@ jobs:
       - name: Build com Maven
         run: mvn package -DskipTests -B
 
-      # --- DEVSECOPS: STEP 1 - SONARQUBE (SAST & Qualidade) ---
-      - name: Analise de Qualidade e SAST (SonarQube)
+      # --- DEVSECOPS: STEP 1 - SONARCLOUD (SAST & Qualidade na Nuvem) ---
+      - name: Analise de Qualidade e SAST (SonarCloud)
         if: ${{ env.SONAR_TOKEN != '' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
         run: |
           mvn sonar:sonar \
-            -Dsonar.projectKey=task-api \
-            -Dsonar.projectName="task-api" \
-            -Dsonar.host.url=${SONAR_HOST_URL:-https://sonarcloud.io}
+            -Dsonar.organization="erick-franca" \
+            -Dsonar.projectKey="erickfranca_task-api" \
+            -Dsonar.host.url="https://sonarcloud.io"
 
       # --- DEVSECOPS: STEP 2 - TRIVY SCA (Scan do pom.xml / Dependencias) ---
       - name: Scan de Dependencias e Codigo Fonte (Trivy SCA)
